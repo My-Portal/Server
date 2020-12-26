@@ -7,7 +7,7 @@ package-lock.json
 
 /config/firebase-config.js
 /dist/login/*
-/dist/login/*
+/dist/portal/*
 
 
 # OS generated files
