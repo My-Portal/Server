@@ -5,6 +5,8 @@ const path = require('path');
 const fs = require('fs');
 const cookieParser = require('cookie-parser');
 
+const cookieChecker = require('./middleware/cookie-checker');
+
 //firebase admin
 const admin = require('firebase-admin');
 const serviceAccount = require('./config/firebase-config.js');
@@ -20,27 +22,6 @@ const app = express();
 app.use(bodyParser.json());
 app.use(cookieParser());
 
-//------------------------------
-
-// middleware to check cookie
-function checkCookieMiddleware(req, res, next) {
-  const sessionCookie = req.cookies.__session || '';
-  admin
-    .auth()
-    .verifySessionCookie(sessionCookie, true)
-    .then((decodedClaims) => {
-      req.decodedClaims = decodedClaims;
-      next();
-    })
-    .catch((error) => {
-      console.log('NO COOKIE ERROR, REDIRECT');
-      // Session cookie is unavailable or invalid. Force user to login.
-      res.redirect('/login');
-    });
-}
-
-//------------------------------
-
 //send homepage (could use express.static)
 app.get('/login', (req, res) => {
   console.log('in /login');
@@ -51,7 +32,7 @@ app.get('/login', (req, res) => {
   res.sendFile(path.join(loginFiles, 'index.html'));
 });
 
-app.get('/', checkCookieMiddleware, (req, res) => {
+app.get('/', cookieChecker, (req, res) => {
   console.log('in /');
   res.sendFile(path.join(portalFiles, 'index.html'));
 });
