@@ -1,0 +1,6 @@
+1) Stop trying to serve 2 apps with express.static. It sucks and isn't even what i want in production
+
+2) just use how we did it in blue ocean. 
+  -> verify error if file DNE with res.sendFile
+
+3) setup with ngnx later?
