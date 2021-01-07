@@ -44,7 +44,12 @@ app.get('*', (req, res) => {
     console.log('has cookie, redirecting to homepage');
     res.sendFile(path.join(portalFiles, req.params['0']));
   } else {
-    res.sendFile(path.join(loginFiles, req.params['0']));
+    res.sendFile(path.join(loginFiles, req.params['0']), (err) => {
+      if (err) {
+        console.log('error', err);
+        res.redirect('/login');
+      }
+    });
   }
 });
 
